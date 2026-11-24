@@ -1,8 +1,29 @@
 import myphoto from './assets/me.jpeg';
 import './App.css';
 import { Routes, Route, Link } from 'react-router-dom';
+import Calculator from './Calculator.jsx';
+import introVideo from './assets/intro.mp4';
+import { useState } from 'react';
 
 function Home() {
+  const [showIntro, setShowIntro] = useState(
+    !sessionStorage.getItem('introSeen')
+  );
+
+  const finishIntro = () => {
+    sessionStorage.setItem('introSeen', 'yes');
+    setShowIntro(false);
+  };
+
+  if (showIntro) {
+    return (
+      <div className='intro'>
+        <video src={introVideo} autoPlay muted playsInline onEnded={finishIntro} />
+        <button className='skip' onClick={finishIntro}>SKIP</button>
+      </div>
+    );
+  }
+
   return (
     <div className='profile'>
       <img src={myphoto} alt='Kevin P' className='photo'
@@ -17,13 +38,21 @@ function Home() {
     </div>
   );
 }
- function About() {
+
+function About() {
   return (
     <div className='panel open about-page'>
       <img src={myphoto} alt='Kevin P' className='about-photo' />
       <div className='about-text'>
         <h1>ABOUT MYSELF</h1>
-        <p>I am Kevin. I am a first year undergraduate student in the BSc Computer Science program at St Joseph's College, Trichy. I enjoy building with code, and I am learning HTML, CSS, JavaScript and React. I am building my first projects, including a React to-do list. I am interested in building websites, creating animations, and solving problems in programming languages. I am good in Python and C++, and I am currently improving my JavaScript. I am fluent in English and Tamil, and I can manage in Hindi.</p>
+        <ul>
+          <li>I am Kevin, a first year BSc Computer Science student at St Joseph's College, Trichy.</li>
+          <li>I enjoy building with code and I am learning HTML, CSS, JavaScript and React.</li>
+          <li>I am building my first projects, including a React to-do list.</li>
+          <li>I am interested in building websites, creating animations, and solving programming problems.</li>
+          <li>I am good in Python and C++, and I am improving my JavaScript.</li>
+          <li>I am fluent in English and Tamil, and I can manage in Hindi.</li>
+        </ul>
         <Link to='/'><button>RETURN</button></Link>
       </div>
     </div>
@@ -36,7 +65,7 @@ function Projects() {
   return (
     <div className='panel open'>
       <h1>PROJECTS</h1>
-      <h3>Coming soon.</h3>
+      <h3>< Link to='/calculator'>CALCULATOR</Link></h3>
       <Link to='/'><button>RETURN</button></Link>
     </div>
   );
@@ -44,10 +73,18 @@ function Projects() {
 
 function Works() {
   return (
-    <div className='panel open'>
+    <div className='panel open about-page'>
+    <div className='about-text'>  
       <h1>WORKS</h1>
-      <h3>Write your works here.</h3>
+      <h2>I started this portfolio with React. First I made the home page in App.jsx, with my photo, my name and four buttons: About, Projects, Works and Contact. I used App.css to give the page colors, spacing and a background image. 
+
+Then I learned React Router. With Routes, Route and Link, every button opens its own page, so I did not need to use state to change pages. I made the About page with my photo and my details, and the Contact page with links to my email, phone, LinkedIn and GitHub.
+
+For my first project, I built a calculator in a new file called Calculator.jsx. I used useState to store the numbers on the screen. Each key adds its value, and the equals key does the math. I styled it in CSS and added a press effect on the keys. I also added floating plus, minus, multiply and divide symbols that appear before the calculator opens.
+
+I added an intro video that plays the first time, and a media query so the site also works on mobile phones. At the end I pushed everything to GitHub with Git and published it with GitHub Pages.</h2>
       <Link to='/'><button>RETURN</button></Link>
+    </div>
     </div>
   );
 }
@@ -77,6 +114,7 @@ function App() {
       <Route path='/projects' element={<Projects />} />
       <Route path='/works' element={<Works />} />
       <Route path='/contact' element={<Contact />} />
+      <Route path='/calculator' element={<Calculator />} />
     </Routes>
   );
 }
